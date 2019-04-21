@@ -248,7 +248,6 @@ int convolve2D(int* in, int* out, int dataSizeX, int dataSizeY,
     
     // start convolution
 
-    //#pragma omp parallel shared (dataSizeX, dataSizeY, inPtr, outPtr, sum) private ( i, j, m, n, rowMax, rowMin, colMax, colMin  )
     #pragma omp parallel for schedule(dynamic,10) private (i, j, m, n, rowMax, rowMin, colMax, colMin)
     for(i= 0; i < dataSizeY; ++i)                   // number of rows
     {
@@ -450,12 +449,10 @@ int main(int argc, char **argv)
                 {
                     convolve2D(source->R, output->R, source->ancho, (source->altura/partitions)+halosize, kern->vkern, kern->kernelX, kern->kernelY);
                 }
-                // #pragma omp nowait
                 #pragma omp section 
                 {
                     convolve2D(source->G, output->G, source->ancho, (source->altura/partitions)+halosize, kern->vkern, kern->kernelX, kern->kernelY);
                 }
-                // #pragma omp nowait
                 #pragma omp section 
                 {
                     convolve2D(source->B, output->B, source->ancho, (source->altura/partitions)+halosize, kern->vkern, kern->kernelX, kern->kernelY);
@@ -463,7 +460,6 @@ int main(int argc, char **argv)
             }
         }        
         
-
         // convolve2D(source->R, output->R, source->ancho, (source->altura/partitions)+halosize, kern->vkern, kern->kernelX, kern->kernelY);
         // convolve2D(source->G, output->G, source->ancho, (source->altura/partitions)+halosize, kern->vkern, kern->kernelX, kern->kernelY);
         // convolve2D(source->B, output->B, source->ancho, (source->altura/partitions)+halosize, kern->vkern, kern->kernelX, kern->kernelY);
