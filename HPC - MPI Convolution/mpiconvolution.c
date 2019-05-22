@@ -434,7 +434,7 @@ int main(int argc, char **argv)
                          - send result
     */
 
-    int rem_job, job, pixel, width, height; 
+    int rem_job, job, pixel, width, height, dest; 
     int msg[4]; // {width, height, halosize, pixel}
     int *ptrR = NULL, *ptrG = NULL, *ptrB = NULL;
 
@@ -523,7 +523,7 @@ int main(int argc, char **argv)
             ptrB = source->B + pixel + rem_job * source->ancho; 
 
             // Send chunk of Image to slaves
-            for (int dest=1;dest<size;dest++){
+            for (dest=1;dest<size;dest++){
                 
                 // Sending chunk of Image
                 MPI_Send(ptrR, pixel, MPI_INT, dest, 1, MPI_COMM_WORLD);
@@ -679,8 +679,8 @@ int main(int argc, char **argv)
         MPI_Send(ptrG, pixel, MPI_INT, 0, 2, MPI_COMM_WORLD);
         MPI_Send(ptrB, pixel, MPI_INT, 0, 3, MPI_COMM_WORLD);
 
-        freeImagestructure(&partImgIn);
-        freeImagestructure(&partImgOut);
+        // freeImagestructure(&partImgIn);
+        // freeImagestructure(&partImgOut);
 
         printf("slave (%d) : %.6lf seconds elapsed for make the convolution.\n", rank, tconv);
     }
