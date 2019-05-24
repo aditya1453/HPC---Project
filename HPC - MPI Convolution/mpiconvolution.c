@@ -51,7 +51,7 @@ int duplicateImageChunk(ImagenData src, ImagenData dst, int dim);
 int initfilestore(ImagenData img, FILE **fp, char* nombre, long *position);
 int savingChunk(ImagenData img, FILE **fp, int dim, int offset);
 int convolve2D(int* inbuf, int* outbuf, int sizeX, int sizeY, float* kernel, int ksizeX, int ksizeY);
-void freeImagestructure(ImagenData *src);
+// void freeImagestructure(ImagenData *src);
 
 //Open Image file and image struct initialization
 ImagenData initimage(char* nombre, FILE **fp,int partitions, int halo){
@@ -68,10 +68,8 @@ ImagenData initimage(char* nombre, FILE **fp,int partitions, int halo){
     else{
         //Memory allocation
         img=(ImagenData) malloc(sizeof(struct imagenppm));
-
         //Reading the first line: Magical Number "P3"
         fscanf(*fp,"%c%d ",&c,&(img->P));
-        
         //Reading the image comment
         while((c=fgetc(*fp))!= '\n'){comentario[i]=c;i++;}
         comentario[i]='\0';
@@ -178,6 +176,7 @@ kernelData leerKernel(char* nombre){
 // Open the image file with the convolution results
 int initfilestore(ImagenData img, FILE **fp, char* nombre, long *position){
     /*Se crea el fichero con la imagen resultante*/
+    
     if ( (*fp=fopen(nombre,"w")) == NULL ){
         perror("Error: ");
         return -1;
@@ -193,23 +192,28 @@ int savingChunk(ImagenData img, FILE **fp, int dim, int offset){
     int i,k=0;
     //Writing image partition
     for(i=offset;i<dim+offset;i++){
+        // Debug
+        // if (i<100){
+        //     printf("%d", i); if (i+1%20==0) printf("\n");
+        // }
         fprintf(*fp,"%d %d %d ",img->R[i],img->G[i],img->B[i]);
-//        if ((i+1)%6==0) fprintf(*fp,"\n");
+    //    if ((i+1)%6==0) fprintf(*fp,"\n");
         k++;
     }
+    
 //    printf ("Writed = %d pixels, dim=%d, offset=%d\n",k,dim, offset);
     return 0;
 }
 
 // This function free the space allocated for the image structure.
-void freeImagestructure(ImagenData *src){
+// void freeImagestructure(ImagenData *src){
     
-    free((*src)->comentario);
-    free((*src)->R);
-    free((*src)->G);
-    free((*src)->B);
-    free(*src);
-}
+//     free((*src)->comentario);
+//     free((*src)->R);
+//     free((*src)->G);
+//     free((*src)->B);
+//     free(*src);
+// }
 
 ///////////////////////////////////////////////////////////////////////////////
 // 2D convolution
@@ -355,8 +359,9 @@ int main(int argc, char **argv)
         partitions = atoi(argv[4]);
 
         ////////////////////////////////////////
-        //Reading kernel matrix
+        // Reading kernel matrix
         ////////////////////////////////////////
+        
         gettimeofday(&tim, NULL); 
         start = tim.tv_sec+(tim.tv_usec/1000000.0);
         tstart = start;
@@ -373,9 +378,9 @@ int main(int argc, char **argv)
         gettimeofday(&tim, NULL);
         treadk = treadk + (tim.tv_sec+(tim.tv_usec/1000000.0) - start);
         
-        ////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////
         //Reading Image Header. Image properties: Magical number, comment, size and color resolution.
-        ////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////
 
         gettimeofday(&tim, NULL);
         start = tim.tv_sec+(tim.tv_usec/1000000.0);
@@ -394,30 +399,34 @@ int main(int argc, char **argv)
         }
         gettimeofday(&tim, NULL);
         tcopy = tcopy + (tim.tv_sec+(tim.tv_usec/1000000.0) - start);
-        
-        ////////////////////////////////////////
-        //Initialize Image Storing file. Open the file and store the image header.
-        ////////////////////////////////////////
 
+        ///////////////////////////////////////////////////////////////////////////
+        //Initialize Image Storing file. Open the file and store the image header.
+        ///////////////////////////////////////////////////////////////////////////
+        
         gettimeofday(&tim, NULL);
         start = tim.tv_sec+(tim.tv_usec/1000000.0);
+        
         if (initfilestore(output, &fpdst, argv[3], &position)!=0) {
             perror("Error: ");
             //        free(source);
             //        free(output);
             return -1;
         }
+        
         gettimeofday(&tim, NULL);
         tstore = tstore + (tim.tv_sec+(tim.tv_usec/1000000.0) - start);
-    
-    } else { // Slaves also read the kernel 
 
+    } else { // Slaves also read the kernel 
+        
         if ( (kern = leerKernel(argv[2]))==NULL) {
             //        free(source);
             //        free(output);
             return -1;
         }
+        
     }
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
     // CHUNK READING
@@ -443,6 +452,7 @@ int main(int argc, char **argv)
     ImagenData partImgOut=NULL; 
 
     if (rank==0){ 
+        
         int c=0, offset=0;
         imagesize = source->altura*source->ancho;
         partsize  = (source->altura*source->ancho)/partitions;
@@ -452,7 +462,7 @@ int main(int argc, char **argv)
             ////////////////////////////////////////////////////////////////////////////////
             // Reading Next chunk.
             ////////////////////////////////////////////////////////////////////////////////
-
+        
             gettimeofday(&tim, NULL);
             start = tim.tv_sec+(tim.tv_usec/1000000.0);
             if (c==0) {
@@ -501,27 +511,22 @@ int main(int argc, char **argv)
 
             // printf("Image Height : %d\n", source->altura);
             // printf("Image Width  : %d\n", source->ancho);
-            
             // // Creating Job Distribution
+
             job       = source->altura/(size*partitions); // number of chunk image row 
             rem_job   = (source->altura/partitions)%size; // number of remaining row 
+            pixel     = job * source->ancho; // total element
             
-            
-            pixel = job * source->ancho; // total element
-
-            msg[0] = source->ancho;
-            msg[1] = source->altura;
-            msg[2] = halosize;
-            msg[3] = pixel;
-            msg[4] = partitions;
+            int msgOut[5] = {source->ancho, source->altura, halosize, pixel, partitions};
 
             // Broadcast number of pixel to other slaves
-            MPI_Bcast(msg, 5, MPI_INT, 0, MPI_COMM_WORLD);
+            MPI_Bcast(msgOut, 5, MPI_INT, 0, MPI_COMM_WORLD);
             
             ptrR = source->R + pixel + rem_job * source->ancho;
             ptrG = source->G + pixel + rem_job * source->ancho; 
             ptrB = source->B + pixel + rem_job * source->ancho; 
 
+            // printf("Master : Sending Chunk Image ... %x\n", fpdst);
             // Send chunk of Image to slaves
             for (dest=1;dest<size;dest++){
                 
@@ -562,6 +567,10 @@ int main(int argc, char **argv)
             //////////////////////////////////////////////////////////////////////////////
             // Receive result from slaves
             //////////////////////////////////////////////////////////////////////////////
+            
+            output->R += rem_job*source->ancho;
+            output->G += rem_job*source->ancho;
+            output->B += rem_job*source->ancho;
 
             for (i=1;i<size;i++){     
                 MPI_Recv(output->R + i*pixel, pixel, MPI_INT, i, 1, MPI_COMM_WORLD, &status);
@@ -573,6 +582,11 @@ int main(int argc, char **argv)
             // CHUNK SAVING
             //////////////////////////////////////////////////////////////////////////////////////////////////
 
+            // printf("Partsize : %d\n ", partsize);
+            // printf("Chunksize : %d\n ", chunksize);
+            // printf("Partsize : %d\n ", pixel);
+            // printf("Offset : %d\n ", offset);
+            
             //Storing resulting image partition.
             gettimeofday(&tim, NULL);
             start = tim.tv_sec+(tim.tv_usec/1000000.0);
@@ -584,7 +598,6 @@ int main(int argc, char **argv)
             }
             gettimeofday(&tim, NULL);
             tstore = tstore + (tim.tv_sec+(tim.tv_usec/1000000.0) - start);
-
             //Next partition
             c++;
         }
@@ -594,7 +607,7 @@ int main(int argc, char **argv)
 
         gettimeofday(&tim, NULL);
         tend = tim.tv_sec+(tim.tv_usec/1000000.0);
-        printf("Master:\n");
+        printf("\nMaster:\n");
         printf("Imatge: %s\n", argv[1]);
         printf("ISizeX : %d\n", source->ancho);
         printf("ISizeY : %d\n", source->altura);
@@ -607,8 +620,8 @@ int main(int argc, char **argv)
         printf("%.6lf seconds elapsed for writing the resulting image.\n", tstore);
         printf("%.6lf seconds elapsed\n", tend-tstart);
         
-        freeImagestructure(&source);
-        freeImagestructure(&output);
+        // freeImagestructure(&source);
+        // freeImagestructure(&output);
     
     } else{ // Slaves
 
@@ -668,16 +681,11 @@ int main(int argc, char **argv)
         //     printf("proc(%d) : partImgOut[%d] = %d \n",rank, j, partImgOut->R[j]);
         //     if ((j+1)%20==0) printf("\n");
         // }
-
-        // Send Result to Master
-        ptrR = partImgOut->R;
-        ptrG = partImgOut->G; 
-        ptrB = partImgOut->B; 
     
         // // Sending chunk of Image
-        MPI_Send(ptrR, pixel, MPI_INT, 0, 1, MPI_COMM_WORLD);
-        MPI_Send(ptrG, pixel, MPI_INT, 0, 2, MPI_COMM_WORLD);
-        MPI_Send(ptrB, pixel, MPI_INT, 0, 3, MPI_COMM_WORLD);
+        MPI_Send(partImgOut->R, pixel, MPI_INT, 0, 1, MPI_COMM_WORLD);
+        MPI_Send(partImgOut->G, pixel, MPI_INT, 0, 2, MPI_COMM_WORLD);
+        MPI_Send(partImgOut->B, pixel, MPI_INT, 0, 3, MPI_COMM_WORLD);
 
         // freeImagestructure(&partImgIn);
         // freeImagestructure(&partImgOut);
