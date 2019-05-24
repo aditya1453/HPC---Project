@@ -250,7 +250,6 @@ int convolve2D(int* in, int* out, int dataSizeX, int dataSizeY,
     inPtr = inPtr2 = &in[dataSizeX * kCenterY + kCenterX];  // note that  it is shifted (kCenterX, kCenterY),
     outPtr = out;
     kPtr = kernel;
-    
     // start convolution
     for(i= 0; i < dataSizeY; ++i)                   // number of rows
     {
@@ -444,7 +443,7 @@ int main(int argc, char **argv)
     */
 
     int rem_job, job, pixel, width, height, dest; 
-    int msg[4]; // {width, height, halosize, pixel}
+    int msg[5]; // {width, height, halosize, pixel, partition}
     int *ptrR = NULL, *ptrG = NULL, *ptrB = NULL;
 
     // Alocating Memory 
@@ -458,7 +457,7 @@ int main(int argc, char **argv)
         partsize  = (source->altura*source->ancho)/partitions;
         // printf("%s ocupa %dx%d=%d pixels. Partitions=%d, halo=%d, partsize=%d pixels\n", argv[1], source->altura, source->ancho, imagesize, partitions, halo, partsize);
         while (c < partitions) {
-            
+            // printf("Master : partition %d\n", c+1);
             ////////////////////////////////////////////////////////////////////////////////
             // Reading Next chunk.
             ////////////////////////////////////////////////////////////////////////////////
@@ -468,7 +467,7 @@ int main(int argc, char **argv)
             if (c==0) {
                 halosize  = halo/2;
                 chunksize = partsize + (source->ancho*halosize);
-                offset   = 0;
+                offset    = 0;
             }
             else if(c<partitions-1) {
                 halosize  = halo;
@@ -512,15 +511,19 @@ int main(int argc, char **argv)
             // printf("Image Height : %d\n", source->altura);
             // printf("Image Width  : %d\n", source->ancho);
             // // Creating Job Distribution
-
+            // printf("Master : Preparing Distributing Job\n");
             job       = source->altura/(size*partitions); // number of chunk image row 
             rem_job   = (source->altura/partitions)%size; // number of remaining row 
             pixel     = job * source->ancho; // total element
-            
-            int msgOut[5] = {source->ancho, source->altura, halosize, pixel, partitions};
+
+            msg[0] = source->ancho; 
+            msg[1] = source->altura;
+            msg[2] = halosize;
+            msg[3] = pixel;
+            msg[4] = partitions;
 
             // Broadcast number of pixel to other slaves
-            MPI_Bcast(msgOut, 5, MPI_INT, 0, MPI_COMM_WORLD);
+            MPI_Bcast(msg, 5, MPI_INT, 0, MPI_COMM_WORLD);
             
             ptrR = source->R + pixel + rem_job * source->ancho;
             ptrG = source->G + pixel + rem_job * source->ancho; 
@@ -528,6 +531,7 @@ int main(int argc, char **argv)
 
             // printf("Master : Sending Chunk Image ... %x\n", fpdst);
             // Send chunk of Image to slaves
+            // printf("Master : Sending Job\n");
             for (dest=1;dest<size;dest++){
                 
                 // Sending chunk of Image
@@ -547,7 +551,7 @@ int main(int argc, char **argv)
             /*
                 Master get an extra job (remaining job)
             */
-
+            // printf("Master : Convolution\n");
             gettimeofday(&tim, NULL);
             start = tim.tv_sec+(tim.tv_usec/1000000.0);
             
@@ -557,7 +561,7 @@ int main(int argc, char **argv)
             
             gettimeofday(&tim, NULL);
             tconv = tconv + (tim.tv_sec+(tim.tv_usec/1000000.0) - start);
-            
+            // printf("Master : Convolution Done\n");
             // // Reset Pointer
             // ptrR = output->R + pixel + rem_job * source->ancho;
             // ptrG = output->G + pixel + rem_job * source->ancho; 
@@ -567,7 +571,7 @@ int main(int argc, char **argv)
             //////////////////////////////////////////////////////////////////////////////
             // Receive result from slaves
             //////////////////////////////////////////////////////////////////////////////
-            
+            // printf("Master : Receiving result\n");
             output->R += rem_job*source->ancho;
             output->G += rem_job*source->ancho;
             output->B += rem_job*source->ancho;
@@ -586,7 +590,7 @@ int main(int argc, char **argv)
             // printf("Chunksize : %d\n ", chunksize);
             // printf("Partsize : %d\n ", pixel);
             // printf("Offset : %d\n ", offset);
-            
+            // printf("Master : Chunk saving\n");
             //Storing resulting image partition.
             gettimeofday(&tim, NULL);
             start = tim.tv_sec+(tim.tv_usec/1000000.0);
@@ -622,10 +626,14 @@ int main(int argc, char **argv)
         
         // freeImagestructure(&source);
         // freeImagestructure(&output);
+
+        free(source->R);    free(source->G);    free(source->B);
+        free(output->R);    free(output->G);    free(output->B);
     
     } else{ // Slaves
 
         // Receive message broadcast from Master
+        
         MPI_Bcast(msg, 5, MPI_INT, 0, MPI_COMM_WORLD);
         width      = msg[0];
         height     = msg[1];
@@ -638,7 +646,8 @@ int main(int argc, char **argv)
         // printf("Height          : %d\n", height);
         // printf("Halosize        : %d\n", halosize);
         // printf("Number of pixel : %d\n", pixel);
-
+        
+        // printf("Slave(%d) : Alocating Memory\n", rank);
         // Alocating Memory - convolution input 
         partImgIn =(ImagenData) malloc(sizeof(struct imagenppm));
         partImgIn->R=calloc(pixel,sizeof(int)); 
@@ -651,6 +660,7 @@ int main(int argc, char **argv)
         partImgOut->G=calloc(pixel,sizeof(int)); 
         partImgOut->B=calloc(pixel,sizeof(int)); 
         
+        // printf("Slave(%d) : Receiving Chunk Image\n", rank);
         // Receiving Chunk Image From Master
         MPI_Recv(partImgIn->R, pixel, MPI_INT, 0, 1, MPI_COMM_WORLD, &status);
         MPI_Recv(partImgIn->G, pixel, MPI_INT, 0, 2, MPI_COMM_WORLD, &status);
@@ -665,7 +675,7 @@ int main(int argc, char **argv)
         //////////////////////////////////////////////////////////////////////////////////////////////////
         // CHUNK CONVOLUTION - SLAVE
         //////////////////////////////////////////////////////////////////////////////////////////////////
-
+        // printf("Slave(%d) : Convolution\n", rank);
         gettimeofday(&tim, NULL);
         start = tim.tv_sec+(tim.tv_usec/1000000.0);
 
@@ -675,13 +685,13 @@ int main(int argc, char **argv)
         
         gettimeofday(&tim, NULL);
         tconv = tconv + (tim.tv_sec+(tim.tv_usec/1000000.0) - start);
-        
+        // printf("Slave(%d) : Convolution Done\n", rank);
         // DEBUG : print result image                
         // for (j = 0; j<50;j++){
         //     printf("proc(%d) : partImgOut[%d] = %d \n",rank, j, partImgOut->R[j]);
         //     if ((j+1)%20==0) printf("\n");
         // }
-    
+        // printf("Slave(%d) : Sending Result\n", rank);
         // // Sending chunk of Image
         MPI_Send(partImgOut->R, pixel, MPI_INT, 0, 1, MPI_COMM_WORLD);
         MPI_Send(partImgOut->G, pixel, MPI_INT, 0, 2, MPI_COMM_WORLD);
@@ -689,6 +699,10 @@ int main(int argc, char **argv)
 
         // freeImagestructure(&partImgIn);
         // freeImagestructure(&partImgOut);
+
+        free(partImgOut->R);    free(partImgOut->G);    free(partImgOut->B);
+        free(partImgIn->R);     free(partImgIn->G);     free(partImgIn->B);
+
 
         printf("slave (%d) : %.6lf seconds elapsed for make the convolution.\n", rank, tconv);
     }
