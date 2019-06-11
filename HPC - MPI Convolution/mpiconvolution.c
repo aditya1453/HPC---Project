@@ -1,5 +1,6 @@
 // Convolution using MPI
-// github : aditya1453
+// github : - aditya1453
+//          - widyameiriska
 //
 //  convolution.c
 //
