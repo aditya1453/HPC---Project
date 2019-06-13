@@ -1,0 +1,130 @@
+-------------------------------------------------------------------------------------------------
+Different Slot Image 4 - Default Kernel : 25x25
+-------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------
+1. Slot 4
+-------------------------------------------------------------------------------------------------
+Master:
+Imatge: /home/ya3/project2/im04.ppm
+ISizeX : 6000
+ISizeY : 4000
+kSizeX : 25
+kSizeY : 25
+4.996170 seconds elapsed for Reading image file.
+0.162414 seconds elapsed for copying image structure.
+0.001630 seconds elapsed for Reading kernel matrix.
+51.827972 seconds elapsed for make the convolution.
+7.574730 seconds elapsed for writing the resulting image.
+67.484479 seconds elapsed
+
+
+-------------------------------------------------------------------------------------------------
+2. Slot 8
+-------------------------------------------------------------------------------------------------
+
+Master:
+Imatge: /home/ya3/project2/im04.ppm
+ISizeX : 6000
+ISizeY : 4000
+kSizeX : 25
+kSizeY : 25
+5.120792 seconds elapsed for Reading image file.
+0.163857 seconds elapsed for copying image structure.
+0.002187 seconds elapsed for Reading kernel matrix.
+28.789017 seconds elapsed for make the convolution.
+7.421777 seconds elapsed for writing the resulting image.
+46.130530 seconds elapsed
+
+-------------------------------------------------------------------------------------------------
+3. Slot 12
+-------------------------------------------------------------------------------------------------
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 883 RUNNING AT compute-0-4.local
+=   EXIT CODE: 139
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================
+
+-------------------------------------------------------------------------------------------------
+4. Slot 16
+-------------------------------------------------------------------------------------------------
+Master:
+Imatge: /home/ya3/project2/im04.ppm
+ISizeX : 6000
+ISizeY : 4000
+kSizeX : 25
+kSizeY : 25
+4.468448 seconds elapsed for Reading image file.
+0.163870 seconds elapsed for copying image structure.
+0.001228 seconds elapsed for Reading kernel matrix.
+17.290627 seconds elapsed for make the convolution.
+7.682394 seconds elapsed for writing the resulting image.
+32.042801 seconds elapsed
+
+-------------------------------------------------------------------------------------------------
+5. Slot 20
+-------------------------------------------------------------------------------------------------
+Master:
+Imatge: /home/ya3/project2/im04.ppm
+ISizeX : 6000
+ISizeY : 4000
+kSizeX : 25
+kSizeY : 25
+4.479508 seconds elapsed for Reading image file.
+0.164637 seconds elapsed for copying image structure.
+0.001457 seconds elapsed for Reading kernel matrix.
+14.983439 seconds elapsed for make the convolution.
+7.629101 seconds elapsed for writing the resulting image.
+29.574984 seconds elapsed
+
+
+-------------------------------------------------------------------------------------------------
+6. Slot 24
+-------------------------------------------------------------------------------------------------
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 5366 RUNNING AT compute-0-0.local
+=   EXIT CODE: 139
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================
+
+
+-------------------------------------------------------------------------------------------------
+7. Slot 28
+-------------------------------------------------------------------------------------------------
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 4841 RUNNING AT compute-0-0.local
+=   EXIT CODE: 139
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================
+
+
+-------------------------------------------------------------------------------------------------
+8. Slot 32
+-------------------------------------------------------------------------------------------------
+
+Master:
+Imatge: /home/ya3/project2/im04.ppm
+ISizeX : 6000
+ISizeY : 4000
+kSizeX : 25
+kSizeY : 25
+4.471964 seconds elapsed for Reading image file.
+0.164380 seconds elapsed for copying image structure.
+0.001237 seconds elapsed for Reading kernel matrix.
+11.586072 seconds elapsed for make the convolution.
+7.619290 seconds elapsed for writing the resulting image.
+25.762068 seconds elapsed
+
+
+
+
+
+
+
