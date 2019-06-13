@@ -1,0 +1,96 @@
+-------------------------------------------------------------------------------------------------
+Different Kernel Image 2 - Number of Slot : 4x4 (16)
+-------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------
+1. Kernel 3
+-------------------------------------------------------------------------------------------------
+Imatge: /home/ya3/project2/im02.ppm
+ISizeX : 600
+ISizeY : 400
+kSizeX : 3
+kSizeY : 3
+0.054908 seconds elapsed for Reading image file.
+0.002275 seconds elapsed for copying image structure.
+0.000705 seconds elapsed for Reading kernel matrix.
+0.057805 seconds elapsed for make the convolution.
+0.072503 seconds elapsed for writing the resulting image.
+0.206874 seconds elapsed
+
+
+
+-------------------------------------------------------------------------------------------------
+2. Kernel 5
+-------------------------------------------------------------------------------------------------
+Master:
+Imatge: /home/ya3/project2/im02.ppm
+ISizeX : 600
+ISizeY : 400
+kSizeX : 5
+kSizeY : 5
+0.069930 seconds elapsed for Reading image file.
+0.002576 seconds elapsed for copying image structure.
+0.001337 seconds elapsed for Reading kernel matrix.
+0.054200 seconds elapsed for make the convolution.
+0.071441 seconds elapsed for writing the resulting image.
+0.225183 seconds elapsed
+
+
+
+
+-------------------------------------------------------------------------------------------------
+3. Kernel 25
+-------------------------------------------------------------------------------------------------
+Master:
+Imatge: /home/ya3/project2/im02.ppm
+ISizeX : 600
+ISizeY : 400
+kSizeX : 25
+kSizeY : 25
+0.078832 seconds elapsed for Reading image file.
+0.002985 seconds elapsed for copying image structure.
+0.001852 seconds elapsed for Reading kernel matrix.
+0.179379 seconds elapsed for make the convolution.
+0.076849 seconds elapsed for writing the resulting image.
+0.386393 seconds elapsed
+
+
+
+
+-------------------------------------------------------------------------------------------------
+4. Kernel 49
+-------------------------------------------------------------------------------------------------
+Master:
+Imatge: /home/ya3/project2/im02.ppm
+ISizeX : 600
+ISizeY : 400
+kSizeX : 49
+kSizeY : 49
+0.078362 seconds elapsed for Reading image file.
+0.002843 seconds elapsed for copying image structure.
+0.002557 seconds elapsed for Reading kernel matrix.
+0.500034 seconds elapsed for make the convolution.
+0.074970 seconds elapsed for writing the resulting image.
+0.703421 seconds elapsed
+
+
+
+
+-------------------------------------------------------------------------------------------------
+5. Kernel 99
+-------------------------------------------------------------------------------------------------
+
+
+Master:
+Imatge: /home/ya3/project2/im02.ppm
+ISizeX : 600
+ISizeY : 400
+kSizeX : 99
+kSizeY : 99
+0.077785 seconds elapsed for Reading image file.
+0.002877 seconds elapsed for copying image structure.
+0.004640 seconds elapsed for Reading kernel matrix.
+1.575176 seconds elapsed for make the convolution.
+0.078121 seconds elapsed for writing the resulting image.
+1.792631 seconds elapsed
+
