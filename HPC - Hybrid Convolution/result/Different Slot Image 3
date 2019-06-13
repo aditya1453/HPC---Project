@@ -1,0 +1,153 @@
+-------------------------------------------------------------------------------------------------
+Different Number Processor- Image 3 - Kernel 25
+-------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------
+1. Number Processor 4
+-------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im3k25p4.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im03.ppm
+ISizeX : 800
+ISizeY : 600
+kSizeX : 25
+kSizeY : 25
+0.099953 seconds elapsed for Reading image file.
+0.003521 seconds elapsed for copying image structure.
+0.002067 seconds elapsed for Reading kernel matrix.
+1.025288 seconds elapsed for make the convolution.
+0.153439 seconds elapsed for writing the resulting image.
+1.389087 seconds elapsed
+
+
+-------------------------------------------------------------------------------------------------
+2. Number Processor 8
+-------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im3k25p8.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im03.ppm
+ISizeX : 800
+ISizeY : 600
+kSizeX : 25
+kSizeY : 25
+0.135702 seconds elapsed for Reading image file.
+0.004258 seconds elapsed for copying image structure.
+0.003032 seconds elapsed for Reading kernel matrix.
+0.568846 seconds elapsed for make the convolution.
+0.159127 seconds elapsed for writing the resulting image.
+0.975107 seconds elapsed
+
+-------------------------------------------------------------------------------------------------
+3. Number Processor 12
+-------------------------------------------------------------------------------------------------
+
+[wm4@moore hybrid]$ cat im3k25p12.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im03.ppm
+ISizeX : 800
+ISizeY : 600
+kSizeX : 25
+kSizeY : 25
+0.137505 seconds elapsed for Reading image file.
+0.004341 seconds elapsed for copying image structure.
+0.001461 seconds elapsed for Reading kernel matrix.
+0.415054 seconds elapsed for make the convolution.
+0.160427 seconds elapsed for writing the resulting image.
+0.824277 seconds elapsed
+
+
+-------------------------------------------------------------------------------------------------
+4. Number Processor 16
+-------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im3k25p16.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im03.ppm
+ISizeX : 800
+ISizeY : 600
+kSizeX : 25
+kSizeY : 25
+0.138630 seconds elapsed for Reading image file.
+0.004057 seconds elapsed for copying image structure.
+0.002246 seconds elapsed for Reading kernel matrix.
+0.347788 seconds elapsed for make the convolution.
+0.159226 seconds elapsed for writing the resulting image.
+0.761172 seconds elapsed
+
+
+-------------------------------------------------------------------------------------------------
+5. Number Processor 20
+-------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im3k25p20.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im03.ppm
+ISizeX : 800
+ISizeY : 600
+kSizeX : 25
+kSizeY : 25
+0.123195 seconds elapsed for Reading image file.
+0.004156 seconds elapsed for copying image structure.
+0.002172 seconds elapsed for Reading kernel matrix.
+0.299595 seconds elapsed for make the convolution.
+0.162205 seconds elapsed for writing the resulting image.
+0.697097 seconds elapsed
+
+
+-------------------------------------------------------------------------------------------------
+6. Number Processor 24
+-------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im3k25p24.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im03.ppm
+ISizeX : 800
+ISizeY : 600
+kSizeX : 25
+kSizeY : 25
+0.109560 seconds elapsed for Reading image file.
+0.003617 seconds elapsed for copying image structure.
+0.002493 seconds elapsed for Reading kernel matrix.
+0.270049 seconds elapsed for make the convolution.
+0.161724 seconds elapsed for writing the resulting image.
+0.649589 seconds elapsed
+
+
+-------------------------------------------------------------------------------------------------
+7. Number Processor 28
+------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im3k25p28.txt
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 2766 RUNNING AT compute-0-5.local
+=   EXIT CODE: 139
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================
+
+-------------------------------------------------------------------------------------------------
+10. Number Processor 32
+-------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im3k25p32.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im03.ppm
+ISizeX : 800
+ISizeY : 600
+kSizeX : 25
+kSizeY : 25
+0.138091 seconds elapsed for Reading image file.
+0.004318 seconds elapsed for copying image structure.
+0.001511 seconds elapsed for Reading kernel matrix.
+0.238065 seconds elapsed for make the convolution.
+0.161551 seconds elapsed for writing the resulting image.
+0.646329 seconds elapsed
+
+
+
+
+
