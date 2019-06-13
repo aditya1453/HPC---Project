@@ -1,0 +1,97 @@
+-------------------------------------------------------------------------------------------------
+Different Kernel Image 1 
+-------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------
+1. Kernel 3
+-------------------------------------------------------------------------------------------------
+
+[wm4@moore hybrid]$ cat im1k5p16.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im01.ppm
+ISizeX : 292
+ISizeY : 320
+kSizeX : 5
+kSizeY : 5
+0.027311 seconds elapsed for Reading image file.
+0.000977 seconds elapsed for copying image structure.
+0.002203 seconds elapsed for Reading kernel matrix.
+0.022321 seconds elapsed for make the convolution.
+0.033509 seconds elapsed for writing the resulting image.
+0.101034 seconds elapsed
+
+
+
+-------------------------------------------------------------------------------------------------
+2. Kernel 5
+-------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im1k5p16.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im01.ppm
+ISizeX : 292
+ISizeY : 320
+kSizeX : 5
+kSizeY : 5
+0.027311 seconds elapsed for Reading image file.
+0.000977 seconds elapsed for copying image structure.
+0.002203 seconds elapsed for Reading kernel matrix.
+0.022321 seconds elapsed for make the convolution.
+0.033509 seconds elapsed for writing the resulting image.
+0.101034 seconds elapsed
+
+-------------------------------------------------------------------------------------------------
+3. Kernel 25
+-------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im1k25p16.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im01.ppm
+ISizeX : 292
+ISizeY : 320
+kSizeX : 25
+kSizeY : 25
+0.035586 seconds elapsed for Reading image file.
+0.001345 seconds elapsed for copying image structure.
+0.002446 seconds elapsed for Reading kernel matrix.
+0.074563 seconds elapsed for make the convolution.
+0.037008 seconds elapsed for writing the resulting image.
+0.173478 seconds elapsed
+
+-------------------------------------------------------------------------------------------------
+4. Kernel 49
+-------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im1k49p16.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im01.ppm
+ISizeX : 292
+ISizeY : 320
+kSizeX : 49
+kSizeY : 49
+0.029578 seconds elapsed for Reading image file.
+0.001114 seconds elapsed for copying image structure.
+0.002880 seconds elapsed for Reading kernel matrix.
+0.197675 seconds elapsed for make the convolution.
+0.033943 seconds elapsed for writing the resulting image.
+0.289643 seconds elapsed
+
+-------------------------------------------------------------------------------------------------
+5. Kernel 99
+-------------------------------------------------------------------------------------------------
+[wm4@moore hybrid]$ cat im1k99p16.txt
+
+Master:
+Imatge: /home/wm4/mpiconv/im01.ppm
+ISizeX : 292
+ISizeY : 320
+kSizeX : 99
+kSizeY : 99
+0.037867 seconds elapsed for Reading image file.
+0.001351 seconds elapsed for copying image structure.
+0.004529 seconds elapsed for Reading kernel matrix.
+0.764524 seconds elapsed for make the convolution.
+0.040231 seconds elapsed for writing the resulting image.
+0.878883 seconds elapsed
+
