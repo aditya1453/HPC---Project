@@ -509,7 +509,10 @@ int main(int argc, char **argv)
             ///////////////////////////////////////////////////////////////////////////
             // Distributing the Chunk Image to Slaves
             ///////////////////////////////////////////////////////////////////////////
-
+            
+            gettimeofday(&tim, NULL);
+            start = tim.tv_sec+(tim.tv_usec/1000000.0);
+            
             // printf("Image Height : %d\n", source->altura);
             // printf("Image Width  : %d\n", source->ancho);
             // // Creating Job Distribution
@@ -554,8 +557,6 @@ int main(int argc, char **argv)
                 Master get an extra job (remaining job)
             */
             // printf("Master : Convolution\n");
-            gettimeofday(&tim, NULL);
-            start = tim.tv_sec+(tim.tv_usec/1000000.0);
             
             // Open Branch Using OpenMP
             
@@ -578,8 +579,7 @@ int main(int argc, char **argv)
             // convolve2D(source->G, output->G, source->ancho, (source->altura/(size*partitions))+ rem_job +halosize, kern->vkern, kern->kernelX, kern->kernelY);
             // convolve2D(source->B, output->B, source->ancho, (source->altura/(size*partitions))+ rem_job +halosize, kern->vkern, kern->kernelX, kern->kernelY);
       
-            gettimeofday(&tim, NULL);
-            tconv = tconv + (tim.tv_sec+(tim.tv_usec/1000000.0) - start);
+            
             // printf("Master : Convolution Done\n");
             // // Reset Pointer
             // ptrR = output->R + pixel + rem_job * source->ancho;
@@ -600,7 +600,9 @@ int main(int argc, char **argv)
                 MPI_Recv(output->G + i*pixel, pixel, MPI_INT, i, 2, MPI_COMM_WORLD, &status);
                 MPI_Recv(output->B + i*pixel, pixel, MPI_INT, i, 3, MPI_COMM_WORLD, &status);
             }
-
+            
+            gettimeofday(&tim, NULL);
+            tconv = tconv + (tim.tv_sec+(tim.tv_usec/1000000.0) - start);
             //////////////////////////////////////////////////////////////////////////////////////////////////
             // CHUNK SAVING
             //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -696,8 +698,8 @@ int main(int argc, char **argv)
         // CHUNK CONVOLUTION - SLAVE
         //////////////////////////////////////////////////////////////////////////////////////////////////
         // printf("Slave(%d) : Convolution\n", rank);
-        gettimeofday(&tim, NULL);
-        start = tim.tv_sec+(tim.tv_usec/1000000.0);
+        // gettimeofday(&tim, NULL);
+        // start = tim.tv_sec+(tim.tv_usec/1000000.0);
         
         // Open Branch Using OpenMP
 
@@ -720,8 +722,8 @@ int main(int argc, char **argv)
         // convolve2D(partImgIn->G, partImgOut->G, width, (height/(size*partitions))+halosize, kern->vkern, kern->kernelX, kern->kernelY);
         // convolve2D(partImgIn->B, partImgOut->B, width, (height/(size*partitions))+halosize, kern->vkern, kern->kernelX, kern->kernelY);
         
-        gettimeofday(&tim, NULL);
-        tconv = tconv + (tim.tv_sec+(tim.tv_usec/1000000.0) - start);
+        // gettimeofday(&tim, NULL);
+        // tconv = tconv + (tim.tv_sec+(tim.tv_usec/1000000.0) - start);
         // printf("Slave(%d) : Convolution Done\n", rank);
         // DEBUG : print result image                
         // for (j = 0; j<50;j++){
@@ -741,7 +743,7 @@ int main(int argc, char **argv)
         free(partImgOut->R);    free(partImgOut->G);    free(partImgOut->B);
         free(partImgIn->R);     free(partImgIn->G);     free(partImgIn->B);
 
-        printf("slave (%d) : %.6lf seconds elapsed for make the convolution.\n", rank, tconv);
+        // printf("slave (%d) : %.6lf seconds elapsed for make the convolution.\n", rank, tconv);
     }
     
     MPI_Finalize();
